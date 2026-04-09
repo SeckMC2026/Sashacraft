@@ -1,0 +1,43 @@
+# Simple workflow for deploying static content to GitHub Pages
+开启:
+
+      - name: Upload artifact推送:
+#在针对默认分支的推送中运行
+::
+分支:“主”
+
+#允许您从“操作”选项卡手动运行此工作流
+  workflow_dispatch:步骤:
+
+运行在:ubuntu-latest
+#设置GITHUB_TOKEN的权限以允许部署到GitHub页面:
+身份标记:写入
+内容:阅读
+身份标记:写入
+
+#只允许一次并发部署，跳过在正在进行的运行和最近排队的运行之间的排队。
+#但是，请不要取消正在进行的运行，因为我们希望这些生产部署能够完成。
+并发性::
+工作:"页面"组:
+正在取消:false
+
+工作::
+# 单次部署作业，因为我们刚刚部署
+部署::
+环境::
+步骤:
+运行在:ubuntu-latest名称:github-pages{步骤.部署.输出.页面URL}}
+运行在:ubuntu-latest
+步骤::
+-名称:上传工件
+-名称:退房
+-名称:设置页
+用途:操作/配置页面@v5
+-名称:上传工件
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
